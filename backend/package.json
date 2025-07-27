@@ -1,0 +1,27 @@
+{
+    "name": "onmo-backend",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "offline": "serverless offline",
+        "deploy": "serverless deploy"
+    },
+    "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.635.0",
+        "@aws-sdk/lib-dynamodb": "^3.635.0",
+        "dotenv": "^17.2.1",
+        "openai": "^4.103.0",
+        "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/aws-lambda": "^8.10.137",
+        "@types/node": "^20.19.9",
+        "@types/uuid": "^9.0.7",
+        "serverless": "^3.39.0",
+        "serverless-esbuild": "^1.55.1",
+        "serverless-offline": "^13.3.2",
+        "typescript": "^5.5.4"
+    }
+}

@@ -1,0 +1,56 @@
+service: onmo-backend
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    CAMPAIGNS_TABLE: Campaigns
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY, ''}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:Query
+      Resource:
+        - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${self:provider.environment.CAMPAIGNS_TABLE}
+        - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${self:provider.environment.CAMPAIGNS_TABLE}/index/*
+
+functions:
+  createCampaign:
+    handler: src/index.createCampaign
+    events:
+      - http:
+          path: campaigns
+          method: post
+          cors: true
+
+  listCampaigns:
+    handler: src/index.listCampaigns
+    events:
+      - http:
+          path: campaigns
+          method: get
+          cors: true
+
+  aiSuggest:
+    handler: src/index.aiSuggest
+    events:
+      - http:
+          path: ai-suggest
+          method: post
+          cors: true
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    exclude: ["aws-sdk"]
+    target: "node18"
+    platform: "node"
+    concurrency: 10
